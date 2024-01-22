@@ -16,12 +16,14 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
-        "illuminate/support": "^8.0"
+        "php": "^8.2",
+        "illuminate/support": "^8.0",
+        "michaelachrisco/readonly": "^0.60.1",
+        "staudenmeir/eloquent-json-relations": "^1.5.4"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0",
-        "phpunit/phpunit": "^9.0"
+        "orchestra/testbench": "^6.42.1",
+        "phpunit/phpunit": "^9.6.16"
     },
     "autoload": {
         "psr-4": {

@@ -118,9 +118,11 @@
       <path value="$PROJECT_DIR$/vendor/spatie/laravel-ray" />
       <path value="$PROJECT_DIR$/vendor/spatie/backtrace" />
       <path value="$PROJECT_DIR$/vendor/spatie/macroable" />
+      <path value="$PROJECT_DIR$/vendor/staudenmeir/eloquent-json-relations" />
+      <path value="$PROJECT_DIR$/vendor/michaelachrisco/readonly" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>

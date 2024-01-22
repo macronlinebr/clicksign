@@ -40,8 +40,8 @@ If you discover any security related issues, please email cyberlpkf@gmail.com in
 
 ## Credits
 
+-   [Mateus Galasso](https://github.com/stonkeep) (original package)
 -   [Luis Fernando Kieça](https://github.com/cyberlpkf)
--   [All Contributors](../../contributors)
 
 ## License
 
