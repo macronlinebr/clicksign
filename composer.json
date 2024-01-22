@@ -32,7 +32,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Cyberlpkf\\Clicksign\\Tests\\": "tests"
         }
     },
     "scripts": {

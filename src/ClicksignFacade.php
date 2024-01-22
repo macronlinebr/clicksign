@@ -4,9 +4,6 @@ namespace Cyberlpkf\Clicksign;
 
 use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Cyberlpkf\Clicksign\Skeleton\SkeletonClass
- */
 class ClicksignFacade extends Facade
 {
     /**
