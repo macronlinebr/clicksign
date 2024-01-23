@@ -2,13 +2,22 @@
 
 namespace Cyberlpkf\Clicksign;
 
-use Cyberlpkf\Clicksign\Exceptions\InvalidDocumentKey;
-use Cyberlpkf\Clicksign\Exceptions\InvalidEmail;
-use Cyberlpkf\Clicksign\Exceptions\InvalidKey;
-use Cyberlpkf\Clicksign\Exceptions\InvalidName;
-use Cyberlpkf\Clicksign\Exceptions\InvalidPath;
-use Cyberlpkf\Clicksign\Exceptions\InvalidSignerKey;
+use Cyberlpkf\Clicksign\Exceptions\InvalidDevelopmentUrlConfigurationException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidDocumentKeyException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidDocumentUrlConfigurationException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidEmailException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidKeyException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidListUrlConfigurationException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidNameException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidNotificationUrlConfiguration;
+use Cyberlpkf\Clicksign\Exceptions\InvalidPathException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidProductionUrlConfigurationException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidSignerKeyException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidSignerUrlConfigurationException;
 use Cyberlpkf\Clicksign\Exceptions\NoAccessTokenException;
+use Cyberlpkf\Clicksign\Exceptions\NoApiSetException;
+use Cyberlpkf\Clicksign\Exceptions\NoConfigurationFoundException;
+use Cyberlpkf\Clicksign\Exceptions\NoFilialSetException;
 use Cyberlpkf\Clicksign\Models\Api;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -17,39 +26,104 @@ use Throwable;
 
 class Clicksign
 {
-    private string $accessToken;
-    private string $documentUrlVersion = '/api/v1/documents';
-    private string $listUrlVersion = '/api/v1/lists';
-    private string $notificationUrlVersion = '/api/v1/notifications';
-    private string $signerUrlVersion = '/api/v1/signers';
-    private string $urlBase;
+    protected string $accessToken;
+    protected string $documentUrlVersion;
+    protected string $listUrlVersion;
+    protected string $notificationUrlVersion;
+    protected string $signerUrlVersion;
+    protected string $urlBase;
+    protected string $developmentUrl;
+    protected string $productionUrl;
+    protected bool $devMode;
+    protected bool $useConfigOnDatabase;
 
-    public function __construct(int $api_id, int $filial)
+    protected int $api_id;
+    protected int $filial_id;
+
+    protected bool $isConfigLoaded = false;
+    protected bool $isConfigValidated = false;
+
+    /**
+     * @return void
+     * @throws Throwable
+     */
+    protected function loadConfig() : void
     {
         try {
-            $this->accessToken = (new Api)
-                ->where('
-                api_id', '=', $api_id)
-                ->where('filial_id', '=', $filial)
-                ->first()
-                ?->credencial
-                ?->accessToken ?? null;
+            if (!$this->isConfigLoaded) {
+                $this->useConfigOnDatabase = config('clicksign.useConfigOnDatabase');
 
-            //get url version
-            $this->documentUrlVersion = config('clicksign.documentUrlVersion');
+                if ($this->useConfigOnDatabase) {
+                    $api = (new Api)
+                        ->where('api_id', '=', $this->api_id)
+                        ->where('filial_id', '=', $this->filial_id)
+                        ->first() ?? null;
 
-            $this->listUrlVersion = config('clicksign.listUrlVersion');
+                    throw_if(!$api->id, (new NoConfigurationFoundException));
 
-            $this->notificationUrlVersion = config('clicksign.notificationUrlVersion');
+                    $this->documentUrlVersion = $api?->credencial['documentUrlVersion'] ?? null;
+                    $this->listUrlVersion = $api?->credencial['listUrlVersion'] ?? null;
+                    $this->notificationUrlVersion = $api?->credencial['notificationUrlVersion'] ?? null;
+                    $this->signerUrlVersion = $api?->credencial['signerUrlVersion'] ?? null;
+                    $this->developmentUrl = $api?->credencial['developmentUrl'] ?? null;
+                    $this->productionUrl = $api?->credencial['productionUrl'] ?? null;
 
-            $this->signerUrlVersion = config('clicksign.signersUrlVersion');
+                    // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
+                    $this->devMode = $api?->credencial['devMode'] ?? true;
+                    $this->urlBase = $this->devMode ? $this->developmentUrl : $this->productionUrl;
 
-            //Mount base URL
-            $this->urlBase = config('clicksign.urlBase');
+                    $this->accessToken = $api?->accessToken ?? null;
+                } else {
+                    $this->documentUrlVersion = config('clicksign.documentUrlVersion');
+                    $this->listUrlVersion = config('clicksign.listUrlVersion');
+                    $this->notificationUrlVersion = config('clicksign.notificationUrlVersion');
+                    $this->signerUrlVersion = config('clicksign.signersUrlVersion');
+                    $this->urlBase = config('clicksign.devMode', true)
+                        ? config('clicksign.developmentUrl')
+                        : config('clicksign.productionUrl');
+                    $this->accessToken = config('clicksign.accessToken');
+                }
 
+                $this->isConfigLoaded = true;
+            }
         } catch (\Exception $e) {
             return;
         }
+    }
+
+    protected function validateConfig() : void
+    {
+        if (!$this->isConfigValidated) {
+            throw_if(is_null($this->documentUrlVersion), (new InvalidDocumentUrlConfigurationException));
+            throw_if(is_null($this->listUrlVersion), (new InvalidListUrlConfigurationException));
+            throw_if(is_null($this->notificationUrlVersion), (new InvalidNotificationUrlConfiguration));
+            throw_if(is_null($this->signerUrlVersion), (new InvalidSignerUrlConfigurationException));
+            throw_if($this->useConfigOnDatabase && is_null($this->api_id), (new NoApiSetException));
+            throw_if($this->useConfigOnDatabase && is_null($this->filial_id), (new NoFilialSetException));
+            throw_if($this->devMode && is_null($this->developmentUrl), (new InvalidDevelopmentUrlConfigurationException));
+            throw_if(!$this->devMode && is_null($this->productionUrl), (new InvalidProductionUrlConfigurationException));
+            $this->isConfigValidated = true;
+        }
+    }
+
+    public function getApiId() : int
+    {
+        return $this->api_id;
+    }
+
+    public function setApiId(int $api_id) : void
+    {
+        $this->api_id = $api_id;
+    }
+
+    public function getFilialId() : int
+    {
+        return $this->filial_id;
+    }
+
+    public function setFilialId(int $filial_id) : void
+    {
+        $this->filial_id = $filial_id;
     }
 
     /**
@@ -57,6 +131,9 @@ class Clicksign
      */
     public function validateToken() : void
     {
+        $this->loadConfig();
+        $this->validateConfig();
+
         throw_if(is_null($this->accessToken), (new NoAccessTokenException));
     }
 
@@ -75,9 +152,9 @@ class Clicksign
                                    string $locale = 'pt-BR', bool $sequence_enabled = false) : Response
     {
         $this->validateToken();
-        //Verify if parameters were passed
-        throw_if(!isset($path), (new InvalidPath));
-        //Mount body
+
+        throw_if(!isset($path), (new InvalidPathException));
+
         $body = [
             "document" => [
                 "path" => $clicksignPath ? "/$clicksignPath" : "/$path",
@@ -100,8 +177,8 @@ class Clicksign
     public function cancelDocument($key) : Response
     {
         $this->validateToken();
-        //Verify if parameters were passed
-        throw_if(!isset($key), (new InvalidKey));
+
+        throw_if(!isset($key), (new InvalidKeyException));
 
         return Http::patch("$this->urlBase$this->documentUrlVersion/$key/cancel?access_token=$this->accessToken");
     }
@@ -114,8 +191,8 @@ class Clicksign
     public function deleteDocument($key) : Response
     {
         $this->validateToken();
-        //Verify if parameters were passed
-        throw_if(!isset($key), (new InvalidKey));
+
+        throw_if(!isset($key), (new InvalidKeyException));
 
         return Http::delete("$this->urlBase$this->documentUrlVersion/$key?access_token=$this->accessToken");
     }
@@ -134,8 +211,8 @@ class Clicksign
     {
         $this->validateToken();
         //Verify if parameters were passed
-        throw_if(!isset($name), (new InvalidName));
-        throw_if(!isset($email), (new InvalidEmail));
+        throw_if(!isset($name), (new InvalidNameException));
+        throw_if(!isset($email), (new InvalidEmailException));
         //Mount body
         $body = [
             "signer" => [
@@ -163,11 +240,12 @@ class Clicksign
     public function signerToDocument(string $document_key, string $signer_key, string $sign_as = 'approve') : Response
     {
         $this->validateToken();
-        throw_if(!isset($document_key), (new InvalidDocumentKey));
-        throw_if(!isset($signer_key), (new InvalidSignerKey));
+
+        throw_if(!isset($document_key), (new InvalidDocumentKeyException));
+        throw_if(!isset($signer_key), (new InvalidSignerKeyException));
 
 //        $message = $message ?? "Prezado ,\nPor favor assine o documento.\n\nQualquer dúvida estou à disposição.\n\nAtenciosamente.";
-        //Mount request body
+
         $body = [
             "list" => [
                 "document_key" => $document_key,
@@ -188,16 +266,15 @@ class Clicksign
     public function notificationsByEmail(string $signer_key, $message = null) : Response
     {
         $this->validateToken();
-        //Verify if parameters were passed
-        throw_if(!isset($signer_key), (new InvalidSignerKey));
-        //Mount body
+
+        throw_if(!isset($signer_key), (new InvalidSignerKeyException));
+
         $body = [
             "request_signature_key" => $signer_key,
             "message" => $message ?? "Prezado Sr(a).\nPor favor, assine o documento.\n\nQualquer dúvida, estamos a disposição.\n\nAtenciosamente.",
         ];
         return Http::post("$this->urlBase$this->notificationUrlVersion?access_token=$this->accessToken", $body);
     }
-
 
     /**
      * @param String $document_key
@@ -208,7 +285,7 @@ class Clicksign
     {
         $this->validateToken();
         //Verify if parameters were passed
-        throw_if(!isset($document_key), (new InvalidDocumentKey));
+        throw_if(!isset($document_key), (new InvalidDocumentKeyException));
         return Http::get("$this->urlBase$this->documentUrlVersion/$document_key?access_token=$this->accessToken");
     }
 }
