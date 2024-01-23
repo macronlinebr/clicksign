@@ -39,6 +39,11 @@ class ClicksignServiceProvider extends ServiceProvider
                 __DIR__.'/../resources/lang' => resource_path('lang/vendor/clicksign'),
             ], 'lang');*/
 
+            $this->publishes([
+                __DIR__ . '/../database/migrations/create_api_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_api_table.php'),
+                // you can add any number of migrations here
+            ], 'migrations');
+
             // Registering package commands.
             // $this->commands([]);
         }
