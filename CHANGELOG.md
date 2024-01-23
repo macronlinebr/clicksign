@@ -1,7 +1,11 @@
 # Changelog
 
-All notable changes to `clicksign` will be documented in this file
+Todas as alterações efetuadas no componente `clicksign` serão documentadas neste arquivo.
 
-## 1.0.0 - 201X-XX-XX
+## 0.2.1-alpha - 2024-01-23
+- Adicionado o suporte para os *tokens* da área de desenvolvimento (sandbox) e da área de produção.
+- Conclusão da documentação do componente.
 
-- initial release
+## 0.1-alpha - 2024-01-17
+
+- Release inicial

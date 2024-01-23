@@ -32,11 +32,12 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Test\\": "test/"
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test": "vendor/bin/phpunit test",
+        "test-coverage": "vendor/bin/phpunit test --coverage-html coverage"
 
     },
     "config": {

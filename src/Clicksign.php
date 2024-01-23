@@ -26,7 +26,8 @@ use Throwable;
 
 class Clicksign
 {
-    protected string $accessToken;
+    protected string $devAccessToken;
+    protected string $prodAccessToken;
     protected string $documentUrlVersion;
     protected string $listUrlVersion;
     protected string $notificationUrlVersion;
@@ -70,19 +71,27 @@ class Clicksign
 
                     // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
                     $this->devMode = $api?->credencial['devMode'] ?? true;
-                    $this->urlBase = $this->devMode ? $this->developmentUrl : $this->productionUrl;
 
-                    $this->accessToken = $api?->accessToken ?? null;
+                    $this->devAccessToken = $api?->devAccessToken ?? null;
+                    $this->prodAccessToken = $api?->prodAccessToken ?? null;
                 } else {
                     $this->documentUrlVersion = config('clicksign.documentUrlVersion');
                     $this->listUrlVersion = config('clicksign.listUrlVersion');
                     $this->notificationUrlVersion = config('clicksign.notificationUrlVersion');
                     $this->signerUrlVersion = config('clicksign.signersUrlVersion');
-                    $this->urlBase = config('clicksign.devMode', true)
-                        ? config('clicksign.developmentUrl')
-                        : config('clicksign.productionUrl');
-                    $this->accessToken = config('clicksign.accessToken');
+                    $this->developmentUrl = config('clicksign.developmentUrl');
+                    $this->productionUrl = config('clicksign.productionUrl');
+
+                    // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
+                    $this->devMode = config('clicksign.devMode', true);
+                    $this->urlBase = $this->devMode ? $this->developmentUrl : $this->productionUrl;
+
+                    $this->devAccessToken = config('clicksign.devAccessToken');
+                    $this->prodAccessToken = config('clicksign.prodAccessToken');
                 }
+
+                $this->urlBase = $this->devMode ? $this->developmentUrl : $this->productionUrl;
+                $this->accessToken = $this->devMode ? $this->devAccessToken : $this->prodAccessToken;
 
                 $this->isConfigLoaded = true;
             }
