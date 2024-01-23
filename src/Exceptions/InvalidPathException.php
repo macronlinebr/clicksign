@@ -2,7 +2,7 @@
 
 namespace Cyberlpkf\Clicksign\Exceptions;
 
-class InvalidPath extends \Exception
+class InvalidPathException extends \Exception
 {
     public static function create(): self
     {

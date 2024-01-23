@@ -2,10 +2,10 @@
 
 namespace Cyberlpkf\Clicksign\Exceptions;
 
-class InvalidDocumentKey extends \Exception
+class InvalidNameException extends \Exception
 {
     public static function create(): self
     {
-        return new static('Chave do documento inválida!');
+        return new static('Nome inválido!');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Cyberlpkf\Clicksign\Exceptions;
 
-class InvalidKey extends \Exception
+class InvalidDocumentKeyException extends \Exception
 {
     public static function create(): self
     {

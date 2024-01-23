@@ -2,7 +2,7 @@
 
 namespace Cyberlpkf\Clicksign\Exceptions;
 
-class InvalidEmail extends \Exception
+class InvalidEmailException extends \Exception
 {
     public static function create(): self
     {
