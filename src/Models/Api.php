@@ -37,9 +37,10 @@ class Api extends Model
         parent::boot();
 
         return static::addGlobalScope('deleted_at', function (Builder $builder) {
+
+            // Caso esteja sendo usado softdelete na tabela, adiciona a condição para não deletado.
             if (Schema::hasColumn($this->table, 'delete_at'))
                 $builder->whereNull('deleted_at');
-
         });
     }
 }
