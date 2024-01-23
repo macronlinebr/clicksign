@@ -12,5 +12,6 @@ return [
     'listUrlVersion' => env('CLICKSIGN_LIST_VERSION', '/api/v1/lists'),
     'notificationUrlVersion' => env('CLICKSIGN_NOTIFICATION_VERSION', '/api/v1/notifications'),
     'signersUrlVersion' => env('CLICKSIGN_SIGNERS_VERSION', '/api/v1/signers'),
-    'accessToken' => env('CLICKSIGN_ACCESS_TOKEN', null),
+    'devAccessToken' => env('CLICKSIGN_DEV_ACCESS_TOKEN', null),
+    'prodAccessToken' => env('CLICKSIGN_PROD_ACCESS_TOKEN', null),
 ];
