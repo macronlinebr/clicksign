@@ -76,10 +76,11 @@ Para que a configuração para a ClickSign seja considerada como válida, os seg
 
 Utilizar a opção de armazenar as configurações da Clicksign no banco de dados, requer que dois métodos sejam chamados *antes* de realizar a chamada efetiva do método desejado. Será necessário configurar o *apiId* e a *filialId* e deverá ser feito da seguinte maneira:
 ``` php
-$clickSign = new Clicksign();
-$clickSign->setApiId(1);
-$clickSign->setFilialId(1);
-$clickSign->createDocument(($path, $clicksignPath = null, $mimetype = 'application/pdf', $deadline = null, $autoClose = true, $locale = 'pt-BR', $sequence_enabled = false);
+$response = (new Clicksign())
+                ->setApiId(1)
+                ->setFilialId(3)
+                ->createDocument($path, $clicksignPath = null, $mimetype = 'application/pdf', $deadline = null, $autoClose = true, $locale = 'pt-BR', $sequence_enabled = false);
+
 ```
 > Não configurar *ApiId* irá gerar a exception *NoApiSetException*.
 

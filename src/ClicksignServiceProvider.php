@@ -16,7 +16,7 @@ class ClicksignServiceProvider extends ServiceProvider
          */
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'clicksign');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'clicksign');
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
@@ -40,7 +40,7 @@ class ClicksignServiceProvider extends ServiceProvider
             ], 'lang');*/
 
             $this->publishes([
-                __DIR__ . '/database/migrations/create_api_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_api_table.php'),
+                __DIR__ . '/../database/migrations/create_api_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_api_table.php'),
                 // you can add any number of migrations here
             ], 'migrations');
 

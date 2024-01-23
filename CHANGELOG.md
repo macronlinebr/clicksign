@@ -2,7 +2,7 @@
 
 Todas as alterações efetuadas no componente `clicksign` serão documentadas neste arquivo.
 
-## 0.2.2-alpha - 2024-01-23
+## 0.2.3-alpha - 2024-01-23
 - Refatorada a publicação das migrations.
 
 ## 0.2.1-alpha - 2024-01-23
