@@ -2,7 +2,6 @@
 
 namespace Cyberlpkf\Clicksign\Models;
 
-use App\Scopes\ApiScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
