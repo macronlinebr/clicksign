@@ -14,14 +14,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('api', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('filial_id');
-            $table->unsignedBigInteger('api_id');
-            $table->json('credencial');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        // Cria a tabela se ela não existir apenas
+        if (!Schema::hasTable('api')) {
+            Schema::create('api', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('filial_id');
+                $table->unsignedBigInteger('api_id');
+                $table->json('credencial');
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**

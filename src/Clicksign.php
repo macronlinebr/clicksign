@@ -29,10 +29,10 @@ class Clicksign
     protected string $devAccessToken;
     protected string $accessToken;
     protected string $prodAccessToken;
-    protected string $documentUrlVersion;
-    protected string $listUrlVersion;
-    protected string $notificationUrlVersion;
-    protected string $signerUrlVersion;
+    protected string $documentEndPoint;
+    protected string $listEndPoint;
+    protected string $notificationEndPoint;
+    protected string $signerEndPoint;
     protected string $urlBase;
     protected string $developmentUrl;
     protected string $productionUrl;
@@ -63,10 +63,10 @@ class Clicksign
 
                     throw_if(!$api->id, (new NoConfigurationFoundException));
 
-                    $this->documentUrlVersion = $api?->credencial['documentUrlVersion'] ?? null;
-                    $this->listUrlVersion = $api?->credencial['listUrlVersion'] ?? null;
-                    $this->notificationUrlVersion = $api?->credencial['notificationUrlVersion'] ?? null;
-                    $this->signerUrlVersion = $api?->credencial['signerUrlVersion'] ?? null;
+                    $this->documentEndPoint = $api?->credencial['documentUrlVersion'] ?? null;
+                    $this->listEndPoint = $api?->credencial['listUrlVersion'] ?? null;
+                    $this->notificationEndPoint = $api?->credencial['notificationUrlVersion'] ?? null;
+                    $this->signerEndPoint = $api?->credencial['signerUrlVersion'] ?? null;
                     $this->developmentUrl = $api?->credencial['developmentUrl'] ?? null;
                     $this->productionUrl = $api?->credencial['productionUrl'] ?? null;
 
@@ -76,10 +76,10 @@ class Clicksign
                     $this->devAccessToken = $api?->devAccessToken ?? null;
                     $this->prodAccessToken = $api?->prodAccessToken ?? null;
                 } else {
-                    $this->documentUrlVersion = config('clicksign.documentUrlVersion');
-                    $this->listUrlVersion = config('clicksign.listUrlVersion');
-                    $this->notificationUrlVersion = config('clicksign.notificationUrlVersion');
-                    $this->signerUrlVersion = config('clicksign.signersUrlVersion');
+                    $this->documentEndPoint = config('clicksign.documentUrlVersion');
+                    $this->listEndPoint = config('clicksign.listUrlVersion');
+                    $this->notificationEndPoint = config('clicksign.notificationUrlVersion');
+                    $this->signerEndPoint = config('clicksign.signersUrlVersion');
                     $this->developmentUrl = config('clicksign.developmentUrl');
                     $this->productionUrl = config('clicksign.productionUrl');
 
@@ -104,10 +104,10 @@ class Clicksign
     protected function validateConfig() : void
     {
         if (!$this->isConfigValidated) {
-            throw_if(is_null($this->documentUrlVersion), (new InvalidDocumentUrlConfigurationException));
-            throw_if(is_null($this->listUrlVersion), (new InvalidListUrlConfigurationException));
-            throw_if(is_null($this->notificationUrlVersion), (new InvalidNotificationUrlConfiguration));
-            throw_if(is_null($this->signerUrlVersion), (new InvalidSignerUrlConfigurationException));
+            throw_if(is_null($this->documentEndPoint), (new InvalidDocumentUrlConfigurationException));
+            throw_if(is_null($this->listEndPoint), (new InvalidListUrlConfigurationException));
+            throw_if(is_null($this->notificationEndPoint), (new InvalidNotificationUrlConfiguration));
+            throw_if(is_null($this->signerEndPoint), (new InvalidSignerUrlConfigurationException));
             throw_if($this->useConfigOnDatabase && is_null($this->api_id), (new NoApiSetException));
             throw_if($this->useConfigOnDatabase && is_null($this->filial_id), (new NoFilialSetException));
             throw_if($this->devMode && is_null($this->developmentUrl), (new InvalidDevelopmentUrlConfigurationException));
@@ -176,7 +176,7 @@ class Clicksign
             ]
         ];
         //return Http::post("$this->urlBase/api/v1/documents?access_token=$this->accessToken", $body);
-        return Http::post("$this->urlBase$this->documentUrlVersion?access_token=$this->accessToken", $body);
+        return Http::post("$this->urlBase$this->documentEndPoint?access_token=$this->accessToken", $body);
     }
 
     /**
@@ -190,7 +190,7 @@ class Clicksign
 
         throw_if(!isset($key), (new InvalidKeyException));
 
-        return Http::patch("$this->urlBase$this->documentUrlVersion/$key/cancel?access_token=$this->accessToken");
+        return Http::patch("$this->urlBase$this->documentEndPoint/$key/cancel?access_token=$this->accessToken");
     }
 
     /**
@@ -204,7 +204,7 @@ class Clicksign
 
         throw_if(!isset($key), (new InvalidKeyException));
 
-        return Http::delete("$this->urlBase$this->documentUrlVersion/$key?access_token=$this->accessToken");
+        return Http::delete("$this->urlBase$this->documentEndPoint/$key?access_token=$this->accessToken");
     }
 
     /**
@@ -237,7 +237,7 @@ class Clicksign
                 "has_documentation" => $has_documentation
             ]
         ];
-        return Http::post("$this->urlBase$this->signerUrlVersion?access_token=$this->accessToken", $body);
+        return Http::post("$this->urlBase$this->signerEndPoint?access_token=$this->accessToken", $body);
     }
 
     /**
@@ -264,7 +264,7 @@ class Clicksign
 //                "message" => $message
             ]
         ];
-        return Http::post("$this->urlBase$this->listUrlVersion?access_token=$this->accessToken", $body);
+        return Http::post("$this->urlBase$this->listEndPoint?access_token=$this->accessToken", $body);
     }
 
     /**
@@ -283,7 +283,7 @@ class Clicksign
             "request_signature_key" => $signer_key,
             "message" => $message ?? "Prezado Sr(a).\nPor favor, assine o documento.\n\nQualquer dúvida, estamos a disposição.\n\nAtenciosamente.",
         ];
-        return Http::post("$this->urlBase$this->notificationUrlVersion?access_token=$this->accessToken", $body);
+        return Http::post("$this->urlBase$this->notificationEndPoint?access_token=$this->accessToken", $body);
     }
 
     /**
@@ -296,6 +296,6 @@ class Clicksign
         $this->validateToken();
         //Verify if parameters were passed
         throw_if(!isset($document_key), (new InvalidDocumentKeyException));
-        return Http::get("$this->urlBase$this->documentUrlVersion/$document_key?access_token=$this->accessToken");
+        return Http::get("$this->urlBase$this->documentEndPoint/$document_key?access_token=$this->accessToken");
     }
 }
