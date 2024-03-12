@@ -39,11 +39,17 @@ class Clicksign
     protected bool $devMode;
     protected bool $useConfigOnDatabase;
 
-    protected int $api_id;
-    protected int $filial_id;
+    protected int $api_id = 0;
+    protected int $filial_id = 0;
 
     protected bool $isConfigLoaded = false;
     protected bool $isConfigValidated = false;
+
+    public function __construct($api_id = 0, $filial_id = 0)
+    {
+        $this->api_id = $api_id;
+        $this->filial_id = $filial_id;
+    }
 
     /**
      * @return void
@@ -57,6 +63,7 @@ class Clicksign
 
                 if ($this->useConfigOnDatabase) {
                     $api = (new Api)
+                        ->ativo()
                         ->where('api_id', '=', $this->api_id)
                         ->where('filial_id', '=', $this->filial_id)
                         ->first() ?? null;
@@ -73,8 +80,8 @@ class Clicksign
                     // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
                     $this->devMode = $api?->credencial['devMode'] ?? true;
 
-                    $this->devAccessToken = $api?->devAccessToken ?? null;
-                    $this->prodAccessToken = $api?->prodAccessToken ?? null;
+                    $this->devAccessToken = $api?->credencial['devAccessToken'] ?? null;
+                    $this->prodAccessToken = $api?->credencial['prodAccessToken'] ?? null;
                 } else {
                     $this->documentEndPoint = config('clicksign.documentUrlVersion');
                     $this->listEndPoint = config('clicksign.listUrlVersion');
@@ -108,8 +115,8 @@ class Clicksign
             throw_if(is_null($this->listEndPoint), (new InvalidListUrlConfigurationException));
             throw_if(is_null($this->notificationEndPoint), (new InvalidNotificationUrlConfiguration));
             throw_if(is_null($this->signerEndPoint), (new InvalidSignerUrlConfigurationException));
-            throw_if($this->useConfigOnDatabase && is_null($this->api_id), (new NoApiSetException));
-            throw_if($this->useConfigOnDatabase && is_null($this->filial_id), (new NoFilialSetException));
+            throw_if($this->useConfigOnDatabase && $this->api_id == 0, (new NoApiSetException));
+            throw_if($this->useConfigOnDatabase && $this->filial_id == 0, (new NoFilialSetException));
             throw_if($this->devMode && is_null($this->developmentUrl), (new InvalidDevelopmentUrlConfigurationException));
             throw_if(!$this->devMode && is_null($this->productionUrl), (new InvalidProductionUrlConfigurationException));
             $this->isConfigValidated = true;
