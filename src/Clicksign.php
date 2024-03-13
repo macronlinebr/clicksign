@@ -26,18 +26,18 @@ use Throwable;
 
 class Clicksign
 {
-    protected string $devAccessToken;
-    protected string $accessToken;
-    protected string $prodAccessToken;
-    protected string $documentEndPoint;
-    protected string $listEndPoint;
-    protected string $notificationEndPoint;
-    protected string $signerEndPoint;
-    protected string $urlBase;
-    protected string $developmentUrl;
-    protected string $productionUrl;
-    protected bool $devMode;
-    protected bool $useConfigOnDatabase;
+    protected string $devAccessToken = '';
+    protected string $accessToken = '';
+    protected string $prodAccessToken = '';
+    protected string $documentEndPoint = '';
+    protected string $listEndPoint = '';
+    protected string $notificationEndPoint = '';
+    protected string $signerEndPoint = '';
+    protected string $urlBase = '';
+    protected string $developmentUrl = '';
+    protected string $productionUrl = '';
+    protected bool $devMode = true;
+    protected bool $useConfigOnDatabase = false;
 
     protected int $api_id = 0;
     protected int $filial_id = 0;
@@ -63,25 +63,24 @@ class Clicksign
 
                 if ($this->useConfigOnDatabase) {
                     $api = (new Api)
-                        ->ativo()
                         ->where('api_id', '=', $this->api_id)
                         ->where('filial_id', '=', $this->filial_id)
                         ->first() ?? null;
 
                     throw_if(!$api->id, (new NoConfigurationFoundException));
 
-                    $this->documentEndPoint = $api?->credencial['documentUrlVersion'] ?? null;
-                    $this->listEndPoint = $api?->credencial['listUrlVersion'] ?? null;
-                    $this->notificationEndPoint = $api?->credencial['notificationUrlVersion'] ?? null;
-                    $this->signerEndPoint = $api?->credencial['signerUrlVersion'] ?? null;
-                    $this->developmentUrl = $api?->credencial['developmentUrl'] ?? null;
-                    $this->productionUrl = $api?->credencial['productionUrl'] ?? null;
+                    $this->documentEndPoint = $api?->credencial['documentUrlVersion'] ?? '';
+                    $this->listEndPoint = $api?->credencial['listUrlVersion'] ?? '';
+                    $this->notificationEndPoint = $api?->credencial['notificationUrlVersion'] ?? '';
+                    $this->signerEndPoint = $api?->credencial['signerUrlVersion'] ?? '';
+                    $this->developmentUrl = $api?->credencial['developmentUrl'] ?? '';
+                    $this->productionUrl = $api?->credencial['productionUrl'] ?? '';
 
                     // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
                     $this->devMode = $api?->credencial['devMode'] ?? true;
 
-                    $this->devAccessToken = $api?->credencial['devAccessToken'] ?? null;
-                    $this->prodAccessToken = $api?->credencial['prodAccessToken'] ?? null;
+                    $this->devAccessToken = $api?->credencial['devAccessToken'] ?? '';
+                    $this->prodAccessToken = $api?->credencial['prodAccessToken'] ?? '';
                 } else {
                     $this->documentEndPoint = config('clicksign.documentUrlVersion');
                     $this->listEndPoint = config('clicksign.listUrlVersion');
@@ -183,7 +182,8 @@ class Clicksign
             ]
         ];
         //return Http::post("$this->urlBase/api/v1/documents?access_token=$this->accessToken", $body);
-        return Http::post("$this->urlBase$this->documentEndPoint?access_token=$this->accessToken", $body);
+        return Http::withBody(json_encode($body), 'application/json')
+            ->post("$this->urlBase$this->documentEndPoint?access_token=$this->accessToken");
     }
 
     /**
