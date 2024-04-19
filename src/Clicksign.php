@@ -224,7 +224,7 @@ class Clicksign
      * @return Response
      * @throws Throwable
      */
-    public function createSigner(String $email, String $name, $phoneNumber = null, String $documentation = null, $birthday = null, bool $has_documentation = false) : Response
+    public function createSigner(String $email, String $name, $phoneNumber = null, string $documentation = null, $birthday = null, bool $has_documentation = false) : Response
     {
         $this->validateToken();
         //Verify if parameters were passed
