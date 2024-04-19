@@ -224,7 +224,7 @@ class Clicksign
      * @return Response
      * @throws Throwable
      */
-    public function createSigner(String $email, String $name, $phoneNumber = null, bool $documentation = false, $birthday = null, bool $has_documentation = false) : Response
+    public function createSigner(String $email, String $name, $phoneNumber = null, String $documentation = null, $birthday = null, bool $has_documentation = false) : Response
     {
         $this->validateToken();
         //Verify if parameters were passed
@@ -244,7 +244,8 @@ class Clicksign
                 "has_documentation" => $has_documentation
             ]
         ];
-        return Http::post("$this->urlBase$this->signerEndPoint?access_token=$this->accessToken", $body);
+        return Http::withBody(json_encode($body), 'application/json')
+            ->post("$this->urlBase$this->signerEndPoint?access_token=$this->accessToken");
     }
 
     /**
