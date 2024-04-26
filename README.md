@@ -22,6 +22,7 @@ Preencha as seguintes variáveis:
 
 ```php
 CLICKSIGN_USE_CONFIG_ON_DATABASE=false
+CLICKSIGN_USE_INTEGRATION=false
 CLICKSIGN_DEV_MODE=true
 CLICKSIGN_DEV_URL=https://sandbox.clicksign.com
 CLICKSIGN_PROD_URL=https://app.clicksign.com
@@ -31,6 +32,7 @@ CLICKSIGN_NOTIFICATION_VERSION="/api/v1/notifications"
 CLICKSIGN_SIGNERS_VERSION="api/v1/signers"
 CLICKSIGN_DEV_ACCESS_TOKEN="SEU TOKEN PARA A ÁREA DE DESENVOLVIMENTO"
 CLICKSIGN_PROD_ACCESS_TOKEN="SEU TOKEN PARA A ÁREA DE PRODUÇÃO"
+CLICKSIGN_DOCUMENT_SIGN_DURATION=0
 ```
 
 ### Para configuração utilizando múltiplas empresas
@@ -58,7 +60,7 @@ Será necessário criar um registro na tabela api para armazenar as diferentes c
 | **filial_id**   | *seu valor* | Contém a identificação de uma filial. Este campo diferencia as diversas configurações de uma mesma API. No caso da ClickSign, use-o para identificar as diversas configurações a serem utilizadas. |
 | **credencial**  | *seu valor* | Contém a configuração da API no formato JSON. Configuração de outras API's também deverão ser armazenadas neste formato.                                                                           |
 
-Para que a configuração para a ClickSign seja considerada como válida, os seguintes atributos deverão estar presentes no campo credencial:
+Para que a configuração da ClickSign seja considerada como válida, os seguintes atributos deverão estar presentes no campo credencial:
 
 | Atributo               | Conteúdo                                                                                                                                                                                                                                       |
 |------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
