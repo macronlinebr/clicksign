@@ -2,6 +2,9 @@
 
 Todas as alterações efetuadas no componente `clicksign` serão documentadas neste arquivo.
 
+## 0.2.12-alpha - 2024-04-26
+- Adicionado os parâmetros *documentSignDuration* e *useIntegration*.
+
 ## 0.2.5-alpha - 2024-01-31
 - Refatorado os parâmetros *documentUrlVersion*, *listUrlVersion*, *notificationUrlVersion* e *signerUrlVersion*. Passaram-se a chamar *documentEndPoint*, *listEndPoint*, *notificationEndPoint* e *signerEndPoint* respectivamente.
 - Refatorada a migration para criar a tabela apenas se a tabela não existir.

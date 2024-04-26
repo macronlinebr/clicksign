@@ -71,6 +71,8 @@ Para que a configuração para a ClickSign seja considerada como válida, os seg
 | devMode                | Deve armazenar os valores *true* ou *false* indicando se está (true) ou não está (false) sendo utilizada a área de desenvolvimento (sandbox).                                                                                                  |
 | devAccessToken         | Deve conter o token de acesso para a área de desenvolvimento. <br/>O não preenchimento deste atributo irá gerar a excessão *NoAccessTokenException*.                                                                                           |
 | prodAccessToken        | Deve conter o token de acesso para a área de produção. <br/>O não preenchimento deste atributo irá gerar a excessão *NoAccessTokenException*.                                                                                                  |
+| useIntegration         | Deve conter true ou false indicando se a integração com a Clicksign será utilizada.                                                                                                                                                            |
+| documentSignDuration   | Deve conter a duração padrão para assinatura em dias. Deve ser maior que zero.                                                                                                                                                                 |
 
 > Caso o atributo *devMode* não esteja configurado, o ambiente de desenvolvimento será utilizado.
 

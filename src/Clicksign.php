@@ -2,8 +2,10 @@
 
 namespace Cyberlpkf\Clicksign;
 
+use Cyberlpkf\Clicksign\Exceptions\IntegrationNotEnabledException;
 use Cyberlpkf\Clicksign\Exceptions\InvalidDevelopmentUrlConfigurationException;
 use Cyberlpkf\Clicksign\Exceptions\InvalidDocumentKeyException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidDocumentSignDurationConfigurationException;
 use Cyberlpkf\Clicksign\Exceptions\InvalidDocumentUrlConfigurationException;
 use Cyberlpkf\Clicksign\Exceptions\InvalidEmailException;
 use Cyberlpkf\Clicksign\Exceptions\InvalidKeyException;
@@ -36,8 +38,10 @@ class Clicksign
     protected string $urlBase = '';
     protected string $developmentUrl = '';
     protected string $productionUrl = '';
+    protected bool $useIntegration = false;
     protected bool $devMode = true;
     protected bool $useConfigOnDatabase = false;
+    protected int $documentSignDuration = 30;
 
     protected int $api_id = 0;
     protected int $filial_id = 0;
@@ -76,8 +80,11 @@ class Clicksign
                     $this->developmentUrl = $api?->credencial['developmentUrl'] ?? '';
                     $this->productionUrl = $api?->credencial['productionUrl'] ?? '';
 
+                    $this->useIntegration = $api?->credencial['useIntegration'] ?? false;
+
                     // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
                     $this->devMode = $api?->credencial['devMode'] ?? true;
+                    $this->documentSignDuration = $api?->credencial['documentSignDuration'] ?? 0;
 
                     $this->devAccessToken = $api?->credencial['devAccessToken'] ?? '';
                     $this->prodAccessToken = $api?->credencial['prodAccessToken'] ?? '';
@@ -89,9 +96,11 @@ class Clicksign
                     $this->developmentUrl = config('clicksign.developmentUrl');
                     $this->productionUrl = config('clicksign.productionUrl');
 
+                    $this->useIntegration = config('clicksign.useIntegration');
+
                     // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
                     $this->devMode = config('clicksign.devMode', true);
-                    $this->urlBase = $this->devMode ? $this->developmentUrl : $this->productionUrl;
+                    $this->documentSignDuration = config('clicksign.documentSignDuration', 0);
 
                     $this->devAccessToken = config('clicksign.devAccessToken');
                     $this->prodAccessToken = config('clicksign.prodAccessToken');
@@ -114,6 +123,7 @@ class Clicksign
             throw_if(is_null($this->listEndPoint), (new InvalidListUrlConfigurationException));
             throw_if(is_null($this->notificationEndPoint), (new InvalidNotificationUrlConfiguration));
             throw_if(is_null($this->signerEndPoint), (new InvalidSignerUrlConfigurationException));
+            throw_if(is_null($this->documentSignDuration) || floatval($this->documentSignDuration) < 1, (new InvalidDocumentSignDurationConfigurationException));
             throw_if($this->useConfigOnDatabase && $this->api_id == 0, (new NoApiSetException));
             throw_if($this->useConfigOnDatabase && $this->filial_id == 0, (new NoFilialSetException));
             throw_if($this->devMode && is_null($this->developmentUrl), (new InvalidDevelopmentUrlConfigurationException));
@@ -151,6 +161,7 @@ class Clicksign
         $this->validateConfig();
 
         throw_if(is_null($this->accessToken), (new NoAccessTokenException));
+        throw_if(!$this->useIntegration, (new IntegrationNotEnabledException));
     }
 
     /**

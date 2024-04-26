@@ -14,4 +14,6 @@ return [
     'signersEndPoint' => env('CLICKSIGN_SIGNERS_VERSION', '/api/v1/signers'),
     'devAccessToken' => env('CLICKSIGN_DEV_ACCESS_TOKEN', null),
     'prodAccessToken' => env('CLICKSIGN_PROD_ACCESS_TOKEN', null),
+    'documentSignDuration' => env('CLICKSIGN_DOCUMENT_DURATION', 0),
+    'useIntegration' => env('CLICKSIGN_USE_INTEGRATION', false),
 ];
