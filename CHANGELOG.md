@@ -2,6 +2,9 @@
 
 Todas as alterações efetuadas no componente `clicksign` serão documentadas neste arquivo.
 
+## 0.2.14-alpha - 2024-04-26
+- Adicionado os métodos *getDocumentSignDuration*, *setDocumentSignDuration*, *getUseIntegration* e *setUseIntegration*.
+
 ## 0.2.12-alpha - 2024-04-26
 - Adicionado os parâmetros *documentSignDuration* e *useIntegration*.
 

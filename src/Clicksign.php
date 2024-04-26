@@ -152,6 +152,27 @@ class Clicksign
         $this->filial_id = $filial_id;
     }
 
+    public function getDocumentSignDuration() : int
+    {
+        return $this->documentSignDuration;
+    }
+
+    public function setDocumentSignDuration(int $duration) : void
+    {
+        $this->documentSignDuration = $duration;
+        $this->isConfigValidated = false;
+    }
+
+    public function getUseIntegration() : bool
+    {
+        return $this->useIntegration;
+    }
+
+    public function setUseIntegration(bool $useIntegration) : void
+    {
+        $this->useIntegration = $useIntegration;
+    }
+
     /**
      * @throws Throwable
      */
