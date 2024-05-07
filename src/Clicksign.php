@@ -154,6 +154,7 @@ class Clicksign
 
     public function getDocumentSignDuration() : int
     {
+        //
         return $this->documentSignDuration;
     }
 
