@@ -22,7 +22,9 @@ use Cyberlpkf\Clicksign\Exceptions\NoConfigurationFoundException;
 use Cyberlpkf\Clicksign\Exceptions\NoFilialSetException;
 use Cyberlpkf\Clicksign\Models\Api;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -68,8 +70,12 @@ class Clicksign
                 if ($this->useConfigOnDatabase) {
                     $api = (new Api)
                         ->where('api_id', '=', $this->api_id)
-                        ->where('filial_id', '=', $this->filial_id)
-                        ->first() ?? null;
+                        ->where('filial_id', '=', $this->filial_id);
+
+                    if (Schema::hasColumn('api', 'deleted_at'))
+                        $api = $api->whereNull('deleted_at');
+
+                    $api = $api->first() ?? null;
 
                     throw_if(!$api->id, (new NoConfigurationFoundException));
 
@@ -80,7 +86,7 @@ class Clicksign
                     $this->developmentUrl = $api?->credencial['developmentUrl'] ?? '';
                     $this->productionUrl = $api?->credencial['productionUrl'] ?? '';
 
-                    $this->useIntegration = $api?->credencial['useIntegration'] ?? false;
+                    $this->useIntegration = $api?->credencial['useIntegration'] == "true" ?? false;
 
                     // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
                     $this->devMode = $api?->credencial['devMode'] ?? true;
@@ -96,7 +102,7 @@ class Clicksign
                     $this->developmentUrl = config('clicksign.developmentUrl');
                     $this->productionUrl = config('clicksign.productionUrl');
 
-                    $this->useIntegration = config('clicksign.useIntegration');
+                    $this->useIntegration = config('clicksign.useIntegration', false) == "true";
 
                     // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
                     $this->devMode = config('clicksign.devMode', true);
@@ -172,6 +178,7 @@ class Clicksign
     public function setUseIntegration(bool $useIntegration) : void
     {
         $this->useIntegration = $useIntegration;
+        $this->isConfigValidated = false;
     }
 
     /**
@@ -183,7 +190,6 @@ class Clicksign
         $this->validateConfig();
 
         throw_if(is_null($this->accessToken), (new NoAccessTokenException));
-        throw_if(!$this->useIntegration, (new IntegrationNotEnabledException));
     }
 
     /**
@@ -208,7 +214,7 @@ class Clicksign
             "document" => [
                 "path" => $clicksignPath ? "/$clicksignPath" : "/$path",
                 "content_base64" => "data:$mimetype;base64," . base64_encode(Storage::get($path)),
-                "deadline_at" => $deadline,
+                "deadline_at" => $deadline ?? Carbon::now()->addDays($this->documentSignDuration) ?? null,
                 "auto_close" => $autoClose,
                 "locale" => $locale,
                 "sequence_enabled" => $sequence_enabled
