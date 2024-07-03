@@ -172,6 +172,11 @@ class Clicksign
 
     public function getUseIntegration() : bool
     {
+        if (!$this->isConfigLoaded) {
+            $this->loadConfig();
+            $this->validateConfig();
+        }
+
         return $this->useIntegration;
     }
 
