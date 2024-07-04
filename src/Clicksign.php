@@ -174,7 +174,7 @@ class Clicksign
     {
         if (!$this->isConfigLoaded) {
             $this->loadConfig();
-            $this->validateConfig(); 
+            $this->validateConfig();
         }
 
         return $this->useIntegration;
