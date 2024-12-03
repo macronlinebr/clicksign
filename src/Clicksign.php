@@ -90,6 +90,7 @@ class Clicksign
 
                     // Caso a variável devMode não esteja configurada, assume como desenvolvimento.
                     $this->devMode = (isset($api?->credencial['devMode']) ? $api?->credencial['devMode'] : true);
+
                     $this->documentSignDuration = $api?->credencial['documentSignDuration'] ?? 0;
 
                     $this->devAccessToken = $api?->credencial['devAccessToken'] ?? '';
