@@ -41,7 +41,7 @@ class Clicksign
     protected string $developmentUrl = '';
     protected string $productionUrl = '';
     protected bool $useIntegration = false;
-    protected bool $productionMode;
+    protected string $environment;
     protected bool $useConfigOnDatabase = false;
     protected int $documentSignDuration = 30;
 
@@ -88,8 +88,8 @@ class Clicksign
 
                     $this->useIntegration = $api?->credencial['useIntegration'] == "true" ?? false;
 
-                    // Caso a variável productionMode não esteja configurada, assume como desenvolvimento.
-                    $this->productionMode = (isset($api?->credencial['productionMode']) ? $api?->credencial['productionMode'] : false);
+                    // Caso a variável environment não esteja configurada, assume como desenvolvimento.
+                    $this->environment = $api?->credencial['environment'] == 'prod';
                     $this->documentSignDuration = $api?->credencial['documentSignDuration'] ?? 0;
 
                     $this->devAccessToken = $api?->credencial['devAccessToken'] ?? '';
@@ -104,16 +104,16 @@ class Clicksign
 
                     $this->useIntegration = config('clicksign.useIntegration', false) == "true";
 
-                    // Caso a variável productionMode não esteja configurada, assume como desenvolvimento.
-                    $this->productionMode = config('clicksign.productionMode', false);
+                    // Caso a variável environment não esteja configurada, assume como desenvolvimento.
+                    $this->environment = config('clicksign.environment', 'dev');
                     $this->documentSignDuration = config('clicksign.documentSignDuration', 0);
 
                     $this->devAccessToken = config('clicksign.devAccessToken');
                     $this->prodAccessToken = config('clicksign.prodAccessToken');
                 }
 
-                $this->urlBase = $this->productionMode ? $this->productionUrl : $this->developmentUrl;
-                $this->accessToken = $this->productionMode ? $this->prodAccessToken : $this->devAccessToken;
+                $this->urlBase = $this->environment == 'prod' ? $this->productionUrl : $this->developmentUrl;
+                $this->accessToken = $this->environment == 'prod' ? $this->prodAccessToken : $this->devAccessToken;
 
                 $this->isConfigLoaded = true;
             }
@@ -132,8 +132,8 @@ class Clicksign
             throw_if(is_null($this->documentSignDuration) || floatval($this->documentSignDuration) < 1, (new InvalidDocumentSignDurationConfigurationException));
             throw_if($this->useConfigOnDatabase && $this->api_id == 0, (new NoApiSetException));
             throw_if($this->useConfigOnDatabase && $this->filial_id == 0, (new NoFilialSetException));
-            throw_if(!$this->productionMode && is_null($this->developmentUrl), (new InvalidDevelopmentUrlConfigurationException));
-            throw_if($this->productionMode && is_null($this->productionUrl), (new InvalidProductionUrlConfigurationException));
+            throw_if(!$this->environment !== 'prod' && is_null($this->developmentUrl), (new InvalidDevelopmentUrlConfigurationException));
+            throw_if($this->environment == 'prod' && is_null($this->productionUrl), (new InvalidProductionUrlConfigurationException));
             $this->isConfigValidated = true;
         }
     }
@@ -225,6 +225,7 @@ class Clicksign
                 "sequence_enabled" => $sequence_enabled
             ]
         ];
+
         //return Http::post("$this->urlBase/api/v1/documents?access_token=$this->accessToken", $body);
         return Http::withBody(json_encode($body), 'application/json')
             ->post("$this->urlBase$this->documentEndPoint?access_token=$this->accessToken");
