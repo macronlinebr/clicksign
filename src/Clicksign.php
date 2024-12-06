@@ -41,7 +41,7 @@ class Clicksign
     protected string $developmentUrl = '';
     protected string $productionUrl = '';
     protected bool $useIntegration = false;
-    protected string $environment;
+    protected string $environment = '';
     protected bool $useConfigOnDatabase = false;
     protected int $documentSignDuration = 30;
 
@@ -125,15 +125,15 @@ class Clicksign
     protected function validateConfig() : void
     {
         if (!$this->isConfigValidated) {
-            throw_if(is_null($this->documentEndPoint), (new InvalidDocumentUrlConfigurationException));
-            throw_if(is_null($this->listEndPoint), (new InvalidListUrlConfigurationException));
-            throw_if(is_null($this->notificationEndPoint), (new InvalidNotificationUrlConfiguration));
-            throw_if(is_null($this->signerEndPoint), (new InvalidSignerUrlConfigurationException));
-            throw_if(is_null($this->documentSignDuration) || floatval($this->documentSignDuration) < 1, (new InvalidDocumentSignDurationConfigurationException));
-            throw_if($this->useConfigOnDatabase && $this->api_id == 0, (new NoApiSetException));
-            throw_if($this->useConfigOnDatabase && $this->filial_id == 0, (new NoFilialSetException));
-            throw_if(!$this->environment !== 'prod' && is_null($this->developmentUrl), (new InvalidDevelopmentUrlConfigurationException));
-            throw_if($this->environment == 'prod' && is_null($this->productionUrl), (new InvalidProductionUrlConfigurationException));
+            throw_if(is_null($this->documentEndPoint), InvalidDocumentUrlConfigurationException::class);
+            throw_if(is_null($this->listEndPoint), InvalidListUrlConfigurationException::class);
+            throw_if(is_null($this->notificationEndPoint), InvalidNotificationUrlConfiguration::class);
+            throw_if(is_null($this->signerEndPoint), InvalidSignerUrlConfigurationException::class);
+            throw_if(is_null($this->documentSignDuration) || floatval($this->documentSignDuration) < 1, InvalidDocumentSignDurationConfigurationException::class);
+            throw_if($this->useConfigOnDatabase && $this->api_id == 0, NoApiSetException::class);
+            throw_if($this->useConfigOnDatabase && $this->filial_id == 0, NoFilialSetException::class);
+            throw_if(!$this->environment !== 'prod' && is_null($this->developmentUrl), InvalidDevelopmentUrlConfigurationException::class);
+            throw_if($this->environment === 'prod' && is_null($this->productionUrl), InvalidProductionUrlConfigurationException::class);
             $this->isConfigValidated = true;
         }
     }
@@ -214,6 +214,7 @@ class Clicksign
         $this->validateToken();
 
         throw_if(!isset($path), (new InvalidPathException));
+        throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
 
         $body = [
             "document" => [
@@ -242,6 +243,8 @@ class Clicksign
 
         throw_if(!isset($key), (new InvalidKeyException));
 
+        throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
+
         return Http::patch("$this->urlBase$this->documentEndPoint/$key/cancel?access_token=$this->accessToken");
     }
 
@@ -256,6 +259,8 @@ class Clicksign
 
         throw_if(!isset($key), (new InvalidKeyException));
 
+        throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
+
         return Http::delete("$this->urlBase$this->documentEndPoint/$key?access_token=$this->accessToken");
     }
 
@@ -263,7 +268,7 @@ class Clicksign
      * @param String $email
      * @param String $name
      * @param null $phoneNumber
-     * @param bool $documentation
+     * @param string|null $documentation
      * @param null $birthday
      * @param bool $has_documentation
      * @return Response
@@ -275,6 +280,7 @@ class Clicksign
         //Verify if parameters were passed
         throw_if(!isset($name), (new InvalidNameException));
         throw_if(!isset($email), (new InvalidEmailException));
+        throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
         //Mount body
         $body = [
             "signer" => [
@@ -306,6 +312,7 @@ class Clicksign
 
         throw_if(!isset($document_key), (new InvalidDocumentKeyException));
         throw_if(!isset($signer_key), (new InvalidSignerKeyException));
+        throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
 
 //        $message = $message ?? "Prezado ,\nPor favor assine o documento.\n\nQualquer dúvida estou à disposição.\n\nAtenciosamente.";
 
@@ -331,6 +338,7 @@ class Clicksign
         $this->validateToken();
 
         throw_if(!isset($signer_key), (new InvalidSignerKeyException));
+        throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
 
         $body = [
             "request_signature_key" => $signer_key,
@@ -349,6 +357,7 @@ class Clicksign
         $this->validateToken();
         //Verify if parameters were passed
         throw_if(!isset($document_key), (new InvalidDocumentKeyException));
+        throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
         return Http::get("$this->urlBase$this->documentEndPoint/$document_key?access_token=$this->accessToken");
     }
 }
