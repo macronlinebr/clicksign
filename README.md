@@ -23,7 +23,7 @@ Preencha as seguintes variáveis:
 ```php
 CLICKSIGN_USE_CONFIG_ON_DATABASE=false
 CLICKSIGN_USE_INTEGRATION=false
-CLICKSIGN_DEV_MODE=true
+CLICKSIGN_ENVIRONMENT=dev
 CLICKSIGN_DEV_URL=https://sandbox.clicksign.com
 CLICKSIGN_PROD_URL=https://app.clicksign.com
 CLICKSIGN_DOCUMENT_VERSION="/api/v1/documents"
@@ -70,7 +70,7 @@ Para que a configuração da ClickSign seja considerada como válida, os seguint
 | signerUrlVersion       | Deve armazenar a versão da API a ser utilizada para a gestão das pessoas que irão assinar o documento, como por exemplo */api/v1/signers*<br/>O não preenchimento deste atributo irá gerara excessão *InvalidSignerUrlConfigurationException*. |
 | developmentUrl         | Deve armazenar a URL para a área de desenvolvimento (sandbox), como por exemplo *https://sandbox.clicksign.com*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidDevelopmentUrlConfigurationException*.                     |
 | productionUrl          | Deve armazenar a URL para a área de produção, como por exemplo *https://app.clicksign.com*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidProductionUrlConfigurationException*.                                           |
-| devMode                | Deve armazenar os valores *true* ou *false* indicando se está (true) ou não está (false) sendo utilizada a área de desenvolvimento (sandbox).                                                                                                  |
+| environment            | Deve armazenar os valores *prod* ou *dev* indicando o ambiente a ser utilizado. *prod* indica o ambiente de produção e *dev* o ambiente sandbox.                                                                                               |
 | devAccessToken         | Deve conter o token de acesso para a área de desenvolvimento. <br/>O não preenchimento deste atributo irá gerar a excessão *NoAccessTokenException*.                                                                                           |
 | prodAccessToken        | Deve conter o token de acesso para a área de produção. <br/>O não preenchimento deste atributo irá gerar a excessão *NoAccessTokenException*.                                                                                                  |
 | useIntegration         | Deve conter true ou false indicando se a integração com a Clicksign será utilizada.                                                                                                                                                            |
