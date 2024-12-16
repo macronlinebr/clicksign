@@ -89,7 +89,7 @@ class Clicksign
                     $this->useIntegration = $api?->credencial['useIntegration'] == "true" ?? false;
 
                     // Caso a variável environment não esteja configurada, assume como desenvolvimento.
-                    $this->environment = $api?->credencial['environment'] == 'prod';
+                    $this->environment = $api?->credencial['environment'] == 'prod' ? 'prod' : 'dev';
                     $this->documentSignDuration = $api?->credencial['documentSignDuration'] ?? 0;
 
                     $this->devAccessToken = $api?->credencial['devAccessToken'] ?? '';
