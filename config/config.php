@@ -5,7 +5,7 @@
  */
 return [
     'useConfigOnDatabase' => env('CLICKSIGN_USE_CONFIG_ON_DATABASE', false),
-    'devMode' => env('CLICKSIGN_DEV_MODE', true),
+    'environment' => env('CLICKSIGN_ENVIRONMENT', 'dev'),
     'developmentUrl' => env('CLICKSIGN_DEV_URL', 'https://sandbox.clicksign.com'),
     'productionUrl' => env('CLICKSIGN_PROD_URL', 'https://app.clicksign.com'),
     'documentEndPoint' => env('CLICKSIGN_DOCUMENT_VERSION', '/api/v1/documents'),
