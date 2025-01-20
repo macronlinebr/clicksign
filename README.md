@@ -27,6 +27,7 @@ CLICKSIGN_ENVIRONMENT=dev
 CLICKSIGN_DEV_URL=https://sandbox.clicksign.com
 CLICKSIGN_PROD_URL=https://app.clicksign.com
 CLICKSIGN_DOCUMENT_VERSION="/api/v1/documents"
+CLICKSIGN_UPDATEDOCUMENT_VERSION="/api/v1/documents"
 CLICKSIGN_LIST_VERSION="api/v1/lists"
 CLICKSIGN_NOTIFICATION_VERSION="/api/v1/notifications"
 CLICKSIGN_SIGNERS_VERSION="api/v1/signers"
@@ -62,19 +63,20 @@ Será necessário criar um registro na tabela api para armazenar as diferentes c
 
 Para que a configuração da ClickSign seja considerada como válida, os seguintes atributos deverão estar presentes no campo credencial:
 
-| Atributo               | Conteúdo                                                                                                                                                                                                                                       |
-|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| documentUrlVersion     | Deve armazenar a versão da API a ser utilizada para a gestão de documentos, como por exemplo */api/v1/documents*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidDocumentUrlConfigurationException*.                       |
-| listUrlVersion         | Deve armazenar a versão da API a ser utilizada para a gestão de listas, como por exemplo */api/v1/lists*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidListUrlConfigurationException*.                                   |
-| notificationUrlVersion | Deve armazenar a versão da API a ser utilizada para as notificações, como por exemplo */api/v1/notifications*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidNotificationUrlConfigurationException*.                      |
-| signerUrlVersion       | Deve armazenar a versão da API a ser utilizada para a gestão das pessoas que irão assinar o documento, como por exemplo */api/v1/signers*<br/>O não preenchimento deste atributo irá gerara excessão *InvalidSignerUrlConfigurationException*. |
-| developmentUrl         | Deve armazenar a URL para a área de desenvolvimento (sandbox), como por exemplo *https://sandbox.clicksign.com*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidDevelopmentUrlConfigurationException*.                     |
-| productionUrl          | Deve armazenar a URL para a área de produção, como por exemplo *https://app.clicksign.com*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidProductionUrlConfigurationException*.                                           |
-| environment            | Deve armazenar os valores *prod* ou *dev* indicando o ambiente a ser utilizado. *prod* indica o ambiente de produção e *dev* o ambiente sandbox.                                                                                               |
-| devAccessToken         | Deve conter o token de acesso para a área de desenvolvimento. <br/>O não preenchimento deste atributo irá gerar a excessão *NoAccessTokenException*.                                                                                           |
-| prodAccessToken        | Deve conter o token de acesso para a área de produção. <br/>O não preenchimento deste atributo irá gerar a excessão *NoAccessTokenException*.                                                                                                  |
-| useIntegration         | Deve conter true ou false indicando se a integração com a Clicksign será utilizada.                                                                                                                                                            |
-| documentSignDuration   | Deve conter a duração padrão para assinatura em dias. Deve ser maior que zero.                                                                                                                                                                 |
+| Atributo                  | Conteúdo                                                                                                                                                                                                                                       |
+|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| documentUrlVersion        | Deve armazenar a versão da API a ser utilizada para a gestão de documentos, como por exemplo */api/v1/documents*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidDocumentUrlConfigurationException*.                       |
+| updateDocumentUrlVersion  | Deve armazenar a versão da API a ser utilizada para a atualização de documentos, como por exemplo */api/v1/documents*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidUpdateDocumentUrlConfigurationException*.            |
+| listUrlVersion            | Deve armazenar a versão da API a ser utilizada para a gestão de listas, como por exemplo */api/v1/lists*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidListUrlConfigurationException*.                                   |
+| notificationUrlVersion    | Deve armazenar a versão da API a ser utilizada para as notificações, como por exemplo */api/v1/notifications*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidNotificationUrlConfigurationException*.                      |
+| signerUrlVersion          | Deve armazenar a versão da API a ser utilizada para a gestão das pessoas que irão assinar o documento, como por exemplo */api/v1/signers*<br/>O não preenchimento deste atributo irá gerara excessão *InvalidSignerUrlConfigurationException*. |
+| developmentUrl            | Deve armazenar a URL para a área de desenvolvimento (sandbox), como por exemplo *https://sandbox.clicksign.com*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidDevelopmentUrlConfigurationException*.                     |
+| productionUrl             | Deve armazenar a URL para a área de produção, como por exemplo *https://app.clicksign.com*<br/>O não preenchimento deste atributo irá gerar a excessão *InvalidProductionUrlConfigurationException*.                                           |
+| environment               | Deve armazenar os valores *prod* ou *dev* indicando o ambiente a ser utilizado. *prod* indica o ambiente de produção e *dev* o ambiente sandbox.                                                                                               |
+| devAccessToken            | Deve conter o token de acesso para a área de desenvolvimento. <br/>O não preenchimento deste atributo irá gerar a excessão *NoAccessTokenException*.                                                                                           |
+| prodAccessToken           | Deve conter o token de acesso para a área de produção. <br/>O não preenchimento deste atributo irá gerar a excessão *NoAccessTokenException*.                                                                                                  |
+| useIntegration            | Deve conter true ou false indicando se a integração com a Clicksign será utilizada.                                                                                                                                                            |
+| documentSignDuration      | Deve conter a duração padrão para assinatura em dias. Deve ser maior que zero.                                                                                                                                                                 |
 
 > Caso o atributo *devMode* não esteja configurado, o ambiente de desenvolvimento será utilizado.
 

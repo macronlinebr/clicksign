@@ -1,7 +1,7 @@
 # Changelog
 
 Todas as alterações efetuadas no componente `clicksign` serão documentadas neste arquivo.
-## 0.2.26-alpha - 2025-01-20
+## 0.2.27-alpha - 2025-01-20
 - Adicionado método para atualizar a data limite para assinatura. A data limite para assinatura do documento poderá ser prorrogado
 para até 90 dias após a data de upload do documento.
 

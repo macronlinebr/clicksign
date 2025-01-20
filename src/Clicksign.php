@@ -16,6 +16,7 @@ use Cyberlpkf\Clicksign\Exceptions\InvalidPathException;
 use Cyberlpkf\Clicksign\Exceptions\InvalidProductionUrlConfigurationException;
 use Cyberlpkf\Clicksign\Exceptions\InvalidSignerKeyException;
 use Cyberlpkf\Clicksign\Exceptions\InvalidSignerUrlConfigurationException;
+use Cyberlpkf\Clicksign\Exceptions\InvalidUpdateDocumentUrlConfigurationException;
 use Cyberlpkf\Clicksign\Exceptions\NoAccessTokenException;
 use Cyberlpkf\Clicksign\Exceptions\NoApiSetException;
 use Cyberlpkf\Clicksign\Exceptions\NoConfigurationFoundException;
@@ -129,6 +130,7 @@ class Clicksign
     {
         if (!$this->isConfigValidated) {
             throw_if(is_null($this->documentEndPoint), InvalidDocumentUrlConfigurationException::class);
+            throw_if(is_null($this->updateDocumentEndPoint), InvalidUpdateDocumentUrlConfigurationException::class);
             throw_if(is_null($this->listEndPoint), InvalidListUrlConfigurationException::class);
             throw_if(is_null($this->notificationEndPoint), InvalidNotificationUrlConfiguration::class);
             throw_if(is_null($this->signerEndPoint), InvalidSignerUrlConfigurationException::class);
