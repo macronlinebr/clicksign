@@ -34,6 +34,7 @@ class Clicksign
     protected string $accessToken = '';
     protected string $prodAccessToken = '';
     protected string $documentEndPoint = '';
+    protected string $updateDocumentEndPoint = '';
     protected string $listEndPoint = '';
     protected string $notificationEndPoint = '';
     protected string $signerEndPoint = '';
@@ -85,6 +86,7 @@ class Clicksign
                     $this->signerEndPoint = $api?->credencial['signerUrlVersion'] ?? '';
                     $this->developmentUrl = $api?->credencial['developmentUrl'] ?? '';
                     $this->productionUrl = $api?->credencial['productionUrl'] ?? '';
+                    $this->updateDocumentEndPoint = $api?->credencial['updateDocumentUrlVersion'] ?? '';
 
                     $this->useIntegration = $api?->credencial['useIntegration'] == "true" ?? false;
 
@@ -101,6 +103,7 @@ class Clicksign
                     $this->signerEndPoint = config('clicksign.signersUrlVersion');
                     $this->developmentUrl = config('clicksign.developmentUrl');
                     $this->productionUrl = config('clicksign.productionUrl');
+                    $this->updateDocumentEndPoint = config('clicksign.updateDocumentEndPoint');
 
                     $this->useIntegration = config('clicksign.useIntegration', false) == "true";
 
@@ -160,7 +163,6 @@ class Clicksign
 
     public function getDocumentSignDuration() : int
     {
-        //
         return $this->documentSignDuration;
     }
 
@@ -359,5 +361,21 @@ class Clicksign
         throw_if(!isset($document_key), (new InvalidDocumentKeyException));
         throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
         return Http::get("$this->urlBase$this->documentEndPoint/$document_key?access_token=$this->accessToken");
+    }
+
+    public function updateDocumentDeadline(String $document_key, \DateTime $deadline_at) : Response
+    {
+        $this->validateToken();
+
+        throw_if(!$this->useIntegration, IntegrationNotEnabledException::class);
+
+        $body = [
+            "document" => [
+                "deadline_at" => $deadline_at,
+            ]
+        ];
+
+        return Http::withBody(json_encode($body), 'application/json')
+            ->patch("$this->urlBase$this->updateDocumentEndPoint?access_token=$this->accessToken");
     }
 }
