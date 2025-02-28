@@ -158,7 +158,7 @@ Veja mais detalhes em [contribuindo](CONTRIBUTING.md).
 
 ### Segurança
 
-Se você descobrir qualquer problema relacionado a segurança, por favor, entre em contato através do e-mail diuliano@macrolabs.com.br.
+Se você descobrir qualquer problema relacionado a segurança, por favor, entre em contato através do e-mail ti@macronline.com.br.
 
 ## Créditos
 
