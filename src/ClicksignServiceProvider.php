@@ -1,6 +1,6 @@
 <?php
 
-namespace Cyberlpkf\Clicksign;
+namespace Macronlinebr\Clicksign;
 
 use Illuminate\Support\ServiceProvider;
 

@@ -1,7 +1,7 @@
 # cyberlpkf/clicksign
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/cyberlpkf/clicksign.svg?style=flat-square)](https://packagist.org/packages/cyberlpkf/clicksign)
-[![Total Downloads](https://img.shields.io/packagist/dt/cyberlpkf/clicksign.svg?style=flat-square)](https://packagist.org/packages/cyberlpkf/clicksign)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/macronlinebr/clicksign.svg?style=flat-square)](https://packagist.org/packages/macronlinebr/clicksign)
+[![Total Downloads](https://img.shields.io/packagist/dt/macronlinebr/clicksign.svg?style=flat-square)](https://packagist.org/packages/macronlinebr/clicksign)
 
 
 O objetivo deste pacote é facilitar a integração com os serviços do ClickSign. Suporta múltiplas credenciais para múltiplas empresas(filiais).
@@ -11,7 +11,7 @@ O objetivo deste pacote é facilitar a integração com os serviços do ClickSig
 Para instalar este pacote via composer, use a seguinte linha de comando:
 
 ```bash
-composer require cyberlpkf/clicksign
+composer require macronlinebr/clicksign
 ```
 
 ## Configuração
@@ -39,7 +39,7 @@ CLICKSIGN_DOCUMENT_SIGN_DURATION=0
 ### Para configuração utilizando múltiplas empresas
 Publique a migration a ser executada:
 ```bash
-php artisan vendor:publish --provider="cyberlpkf\clicksign\ClickSignServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Macronlinebr\Clicksign\ClickSignServiceProvider" --tag="migrations"
 ```
 
 Execute a migration:
@@ -158,12 +158,13 @@ Veja mais detalhes em [contribuindo](CONTRIBUTING.md).
 
 ### Segurança
 
-Se você descobrir qualquer problema relacionado a segurança, por favor, entre em contato através do e-mail cyberlpkf@gmail.com.
+Se você descobrir qualquer problema relacionado a segurança, por favor, entre em contato através do e-mail diuliano@macrolabs.com.br.
 
 ## Créditos
 
 -   [Mateus Galasso](https://github.com/stonkeep) (pacote original)
--   [Luis Fernando Kieça](https://github.com/cyberlpkf)
+-   [Luis Fernando Kieça](https://github.com/cyberlpkf) (pacote original)
+
 
 ## Licença
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Cyberlpkf\Clicksign\Models;
+namespace Macronlinebr\Clicksign\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Cyberlpkf\Clicksign\Exceptions;
+namespace Macronlinebr\Clicksign\Exceptions;
 
 class InvalidUpdateDocumentUrlConfigurationException extends \Exception
 {

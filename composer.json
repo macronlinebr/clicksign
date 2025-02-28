@@ -1,23 +1,23 @@
 {
-    "name": "cyberlpkf/clicksign",
+    "name": "macronlinebr/clicksign",
     "description": "Pacote para integração com os serviços da ClickSign",
     "keywords": [
-        "cyberlpkf",
+        "macronlinebr",
         "clicksign"
     ],
-    "homepage": "https://github.com/cyberlpkf/clicksign",
+    "homepage": "https://github.com/macronlinebr/clicksign",
     "license": "MIT",
     "type": "library",
     "authors": [
         {
-            "name": "Luis Fernando Kieça",
-            "email": "cyberlpkf@gmail.com",
+            "name": "Macronline",
+            "email": "diuliano@macrolabs.com.br",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.2",
-        "illuminate/support": "^8.0",
+        "php": "^8.2|^8.3",
+        "illuminate/support": "^10.0",
         "michaelachrisco/readonly": "^0.60.1",
         "staudenmeir/eloquent-json-relations": "^1.5.4"
     },
@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Cyberlpkf\\Clicksign\\": "src"
+            "Macronlinebr\\Clicksign\\": "src"
         }
     },
     "autoload-dev": {
@@ -46,10 +46,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Cyberlpkf\\Clicksign\\ClicksignServiceProvider"
+                "Macronlinebr\\Clicksign\\ClicksignServiceProvider"
             ],
             "aliases": {
-                "Clicksign": "Cyberlpkf\\Clicksign\\ClicksignFacade"
+                "Clicksign": "Macronlinebr\\Clicksign\\ClicksignFacade"
             }
         }
     }
